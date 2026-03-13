@@ -8,9 +8,10 @@ All of this guide must be done inside the `maya4docker` folder, not inside the r
    chmod +x on_host.sh
    ./on_host.sh
    ```
-5. Start the container with the script `run.sh`:
+5. Copy the `.env.example` file into a new `.env` file and fill it according to the instructions inside.
+6. Start the container with the script `run.sh`:
    ```bash
    chmod +x ./run.sh
    ./run.sh
    ```
-6. 
+7. Login normally and you are ready to go!
