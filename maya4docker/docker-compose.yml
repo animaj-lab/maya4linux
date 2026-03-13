@@ -1,0 +1,36 @@
+services:
+  maya:
+    build:
+      context: .
+      args:
+        HOST_UID: ${UUID}
+        HOST_GID: ${GUID}
+    image: maya:2026.3
+    container_name: maya
+    network_mode: host      # --network host
+    security_opt:
+      - seccomp=unconfined
+    cap_add:
+      - IPC_LOCK
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [graphics, compute, utility, display]
+    environment:
+      DISPLAY: ${DISPLAY}
+      XDG_RUNTIME_DIR: /tmp/runtime-user
+      DBUS_SESSION_BUS_ADDRESS: unix:path=/tmp/runtime-user/bus
+      XDG_CURRENT_DESKTOP: ${XDG_CURRENT_DESKTOP}
+      QT_QPA_PLATFORM: xcb
+      WEBKIT_DISABLE_COMPOSITING_MODE: 1
+      QT_X11_NO_MITSHM: 1
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: graphics,compute,utility,display
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /run/user/${UUID}:/tmp/runtime-user
+      - /tmp/.X11-unix:/tmp/.X11-unix

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=Host Browser
+Exec=/home/user/browser.sh %u
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/http;x-scheme-handler/https;
