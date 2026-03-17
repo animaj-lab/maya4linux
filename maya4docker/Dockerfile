@@ -1,4 +1,4 @@
-FROM almalinux:8
+FROM rockylinux:9.3
 
 ENV container=docker
 
@@ -82,6 +82,9 @@ RUN dnf install -y \
         cups-libs \
         atk \
         at-spi2-atk \
+        compat-openssl11 \
+        openssl-libs \
+        libxcrypt-compat \
     && \
     dnf clean all && rm -rf /var/cache/dnf
 
@@ -109,8 +112,11 @@ RUN ln -s /opt/Autodesk/AdskIdentityManager/1.18.1.2 /opt/Autodesk/AdskIdentityM
 # User setup
 ARG HOST_UID=1000
 ARG HOST_GID=1000
-RUN groupadd -g ${HOST_GID} user && \
-    useradd -u ${HOST_UID} -g ${HOST_GID} -m user
+
+# Create group if doesn't exist
+RUN getent group ${HOST_GID} || groupadd -g ${HOST_GID} user
+
+RUN useradd -u ${HOST_UID} -g ${HOST_GID} -m user
 RUN usermod -aG video user
 RUN groupadd -r render || true
 RUN usermod -aG render user

@@ -1,0 +1,32 @@
+services:
+  maya:
+    build:
+      context: .
+      args:
+        HOST_UID: ${UUID}
+        HOST_GID: ${GUID}
+    image: maya:2026.3
+    container_name: maya
+    network_mode: host      # --network host
+    security_opt:
+      - seccomp=unconfined
+    cap_add:
+      - IPC_LOCK
+    environment:
+      DISPLAY: ${DISPLAY}
+      XDG_RUNTIME_DIR: /tmp/runtime-user
+      DBUS_SESSION_BUS_ADDRESS: unix:path=/tmp/runtime-user/bus
+      XDG_CURRENT_DESKTOP: ${XDG_CURRENT_DESKTOP}
+      QT_QPA_PLATFORM: xcb
+      WEBKIT_DISABLE_COMPOSITING_MODE: 1
+      QT_X11_NO_MITSHM: 1
+      MAYA_APP_DIR: /home/user/maya
+      MAYA_PROJECTS_DIR: /home/user/projects
+    env_file: ./.env
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /run/user/${UUID}:/tmp/runtime-user
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${APP_DIR:-$HOME/maya}:/home/user/maya:rw
+      - ${PROJECTS_DIR:-$HOME/Documents}:/home/user/projects:rw

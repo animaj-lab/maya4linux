@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Set up X11 permissions for the Docker container to access the display
 xhost +local:docker
@@ -6,7 +7,7 @@ xhost +local:docker
 # Create the adskidmgr:// protocol handler script
 mkdir -p "$HOME/.local/bin"
 cat > "$HOME/.local/bin/adskidmgr-handler" << 'EOF'
-#!/bin/bash
+#!/usr/bin/env bash
 docker exec -u user maya /opt/Autodesk/AdskIdentityManager/Current/AdskIdentityManager "$1"
 EOF
 chmod +x "$HOME/.local/bin/adskidmgr-handler"
